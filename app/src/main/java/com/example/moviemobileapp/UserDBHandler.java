@@ -2,6 +2,7 @@ package com.example.moviemobileapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,8 +13,7 @@ public class UserDBHandler extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
 
     // below variable is for our table name.
-    private static final String TABLE_NAME = "mycourses";
-
+    private static final String TABLE_NAME = "user";
     // below variable is for our id column.
     private static final String ID_COL = "id";
 
@@ -21,13 +21,7 @@ public class UserDBHandler extends SQLiteOpenHelper {
     private static final String NAME_COL = "name";
 
     // below variable id for our course duration column.
-    private static final String DURATION_COL = "duration";
-
-    // below variable for our course description column.
-    private static final String DESCRIPTION_COL = "description";
-
-    // below variable is for our course tracks column.
-    private static final String TRACKS_COL = "tracks";
+    private static final String PASSWORD_COL = "password";
 
     // creating a constructor for our database handler.
     public UserDBHandler(Context context) {
@@ -44,9 +38,7 @@ public class UserDBHandler extends SQLiteOpenHelper {
         String query = "CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + NAME_COL + " TEXT,"
-                + DURATION_COL + " TEXT,"
-                + DESCRIPTION_COL + " TEXT,"
-                + TRACKS_COL + " TEXT)";
+                + PASSWORD_COL + " TEXT)";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -54,7 +46,7 @@ public class UserDBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewCourse(String courseName, String courseDuration, String courseDescription, String courseTracks) {
+    public void addNewUser(String username, String password) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -67,10 +59,8 @@ public class UserDBHandler extends SQLiteOpenHelper {
 
         // on below line we are passing all values
         // along with its key and value pair.
-        values.put(NAME_COL, courseName);
-        values.put(DURATION_COL, courseDuration);
-        values.put(DESCRIPTION_COL, courseDescription);
-        values.put(TRACKS_COL, courseTracks);
+        values.put(NAME_COL, username);
+        values.put(PASSWORD_COL, password);
 
         // after adding all values we are passing
         // content values to our table.
@@ -86,5 +76,60 @@ public class UserDBHandler extends SQLiteOpenHelper {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+    public User findUserByNameAndPassword(User user){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME, new String[] { ID_COL,
+                        NAME_COL, PASSWORD_COL }, NAME_COL + "=? and "+PASSWORD_COL+"=?,",
+                new String[] { user.getUserNmae(),user.getPassword()}, null, null, null, null);
+        if (cursor != null){
+            cursor.moveToFirst();
+            user = new User(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2));
+            return user;
+        }else {
+            return null;
+        }
+
+        //User user = new User(Integer.parseInt(cursor.getString(0)),
+        //      cursor.getString(1), cursor.getString(2));
+        // return contact
+    }
+
+    public User findUserByID(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME, new String[] { ID_COL,
+                        NAME_COL, PASSWORD_COL }, ID_COL + "=?,",
+                new String[] { String.valueOf(id)}, null, null, null, null);
+        if (cursor != null){
+            cursor.moveToFirst();
+            User user = new User(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2));
+            return user;
+        }else {
+            return null;
+        }
+
+        //User user = new User(Integer.parseInt(cursor.getString(0)),
+        //      cursor.getString(1), cursor.getString(2));
+        // return contact
+    }
+
+    public boolean findUserByName(String name){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME, new String[] { ID_COL,
+                        NAME_COL, PASSWORD_COL }, NAME_COL + "=?",
+                new String[] { name}, null, null, null, null);
+        if (cursor != null){
+//            cursor.moveToFirst();
+            return true;
+        }else {
+            return false;
+        }
+
+        //User user = new User(Integer.parseInt(cursor.getString(0)),
+          //      cursor.getString(1), cursor.getString(2));
+        // return contact
     }
 }
