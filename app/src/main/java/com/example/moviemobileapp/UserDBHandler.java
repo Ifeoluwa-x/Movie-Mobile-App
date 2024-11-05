@@ -115,12 +115,12 @@ public class UserDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME_USER, new String[] { ID_COL,
                         NAME_COL, PASSWORD_COL }, NAME_COL + "=? and "+PASSWORD_COL+"=?,",
                 new String[] { user.getUserNmae(),user.getPassword()}, null, null, null, null);
-        if (cursor != null){
+        if (cursor.getCount()==0){
+            return null;
+        }else {
             cursor.moveToFirst();
             user = new User(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2));
             return user;
-        }else {
-            return null;
         }
 
         //User user = new User(Integer.parseInt(cursor.getString(0)),
@@ -134,12 +134,12 @@ public class UserDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME_USER, new String[] { ID_COL,
                         NAME_COL, PASSWORD_COL }, ID_COL + "=?,",
                 new String[] { String.valueOf(id)}, null, null, null, null);
-        if (cursor != null){
+        if (cursor.getCount()==0){
+            return null;
+        }else {
             cursor.moveToFirst();
             User user = new User(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2));
             return user;
-        }else {
-            return null;
         }
 
         //User user = new User(Integer.parseInt(cursor.getString(0)),
@@ -161,7 +161,7 @@ public class UserDBHandler extends SQLiteOpenHelper {
         }
 
         //User user = new User(Integer.parseInt(cursor.getString(0)),
-        //      cursor.getString(1), cursor.getString(2));
+          //      cursor.getString(1), cursor.getString(2));
         // return contact
     }
     //Order methods
@@ -199,12 +199,12 @@ public class UserDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME_ORDER, new String[] { ID_COL,
                         USERID, TIME,MOVIEID,SCREENID }, USERID + "=?,",
                 new String[] { String.valueOf(id)}, null, null, null, null);
-        if (cursor != null){
+        if (cursor.getCount()==0){
+            return null;
+        }else {
             cursor.moveToFirst();
             Order order= new Order(Integer.parseInt(cursor.getString(0)),Integer.parseInt(cursor.getString(1)), cursor.getString(2), Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)));
             return order;
-        }else {
-            return null;
         }
 
         //User user = new User(Integer.parseInt(cursor.getString(0)),
