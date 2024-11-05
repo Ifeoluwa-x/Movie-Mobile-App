@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Optionally redirect to SignInActivity
             startActivity(new Intent(MainActivity.this, SignInActivity.class));
+            Toast.makeText(this, "Hi. tHIS ", Toast.LENGTH_SHORT).show();
             finish(); // Close SignupActivity
         }
     }

@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MovieMobileApp"
         tools:targetApi="31">
         <activity
-            android:name=".Signup"
+            android:name=".SignInActivity"
             android:exported="true">
 
         </activity>
